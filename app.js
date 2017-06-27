@@ -14,14 +14,16 @@ GAME RULES:
 // var x = document.querySelector( "#score-0" ).textContent;
 // console.log(x)
 
-var scores, roundScore, activePlayer, dice, gamePlaying;
+var scores, roundScore, activePlayer, dice, gamePlaying, previousRolls = [];
 
 init();
 
 document.querySelector( ".btn-roll" ).addEventListener( "click", function() {
   if ( gamePlaying ) {
     // 1. Generate a random number
-    var dice = Math.floor( ( Math.random() * 6 ) + 1 );
+    dice = Math.floor( ( Math.random() * 6 ) + 1 );
+    console.log(dice);
+    storeRolls(dice);
     // 2. Diplay the result
     var diceDOM = document.querySelector( ".dice" );
     diceDOM.style.display = "block";
@@ -29,6 +31,9 @@ document.querySelector( ".btn-roll" ).addEventListener( "click", function() {
 
     // 3. Update the round score IF the rolled number was NOT a 1
     if ( dice !== 1 ) {
+      if ( dice === 6 ) {
+        doubleSixes();
+      };
       roundScore += dice;
       document.querySelector( "#current-" + activePlayer ).textContent = roundScore;
     } else {
@@ -104,4 +109,23 @@ function nextPlayer() {
   document.querySelector( ".player-1-panel" ).classList.toggle( "active" );
 
   document.querySelector( ".dice" ).style.display = "none";
+}
+
+function storeRolls(currentRoll) {
+  previousRolls.length <= 2 ? previousRolls.push(currentRoll) : previousRolls = new Array;
+}
+
+function doubleSixes() {
+  // If player rolls two 6's back-to-back, GLOBAL score is returned to 0 and it is the next player's turn
+  // 1. Create an variable to store previous roll
+  // 2. After next roll, verify that two 6's have not been rolled
+  // 3. If two 6's have been rolled, erase GLOBAL score
+  // 4. End player's turn
+  if ( previousRolls[0] === previousRolls[1] ) {
+    console.log("DOUBLE 6's!")
+    scores[activePlayer] = 0;
+    document.querySelector( "#score-" + activePlayer ).textContent = "0";
+    previousRolls = new Array;
+    nextPlayer();
+  }
 }
