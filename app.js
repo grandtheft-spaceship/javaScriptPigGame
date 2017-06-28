@@ -14,9 +14,11 @@ GAME RULES:
 // var x = document.querySelector( "#score-0" ).textContent;
 // console.log(x)
 
-var scores, roundScore, activePlayer, dice, gamePlaying, previousRolls = [];
+var scores, roundScore, activePlayer, dice, gamePlaying, previousRolls = [], winningScore;
 
 init();
+
+// document.createElement('input');
 
 document.querySelector( ".btn-roll" ).addEventListener( "click", function() {
   if ( gamePlaying ) {
@@ -53,7 +55,7 @@ document.querySelector( ".btn-hold" ).addEventListener( "click", function() {
     document.querySelector( "#score-" + activePlayer ).textContent = scores[activePlayer];
     // 3. Check if player won the game
 
-    if ( scores[activePlayer] >= 100 ) {
+    if ( scores[activePlayer] >= winningScore ) {
       document.querySelector( "#name-" + activePlayer ).textContent = "Winner!";
       document.querySelector( ".dice" ).style.display = "none";
       document.querySelector( ".player-" + activePlayer + "-panel" ).classList.add( "winner" );
